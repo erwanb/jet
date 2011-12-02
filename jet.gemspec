@@ -1,0 +1,31 @@
+# -*- encoding: utf-8 -*-
+$:.push File.expand_path('../lib', __FILE__)
+require 'jet/version'
+
+Gem::Specification.new do |s|
+  s.name        = 'jet-framework'
+  s.platform    = Gem::Platform::RUBY
+  s.version     = Jet::VERSION
+  s.authors     = ['Erwan Barrier']
+  s.email       = ['erwan.barrier@gmail.com']
+  s.homepage    = 'http://github.com/erwanb/jet'
+  s.summary     = 'The Jet framework gem'
+  s.description = 'Jet is a micro framework that sits on top of sproutcore 2'
+
+  s.required_rubygems_version = ">= 1.3.6"
+  s.rubyforge_project         = 'jet-framework'
+
+  s.add_dependency 'thor'
+  s.add_dependency 'foreman'
+  s.add_dependency 'sprockets'
+  s.add_dependency 'coffee-script'
+  s.add_dependency 'compass', ">= 0.12.alpha.2"
+  s.add_dependency 'sprockets-sass'
+  s.add_dependency 'guard'
+
+  s.add_development_dependency 'bundler'
+
+  s.files        = Dir.glob('{lib,bin}/**/{*,.*}') + %w[LICENSE README.md]
+  s.executables  = ['jet']
+  s.require_path = 'lib'
+end

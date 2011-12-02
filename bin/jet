@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'jet'
+rescue LoadError
+  $: << File.join(File.dirname(__FILE__), '..', 'lib')
+  require 'jet'
+end
+
+Jet::CLI.start
