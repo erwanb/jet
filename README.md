@@ -1,4 +1,4 @@
-== Welcome to Jet
+# Welcome to Jet
 
 **This is a quick & dirty proof of concept**
 
