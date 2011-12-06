@@ -24,6 +24,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'guard'
 
   s.add_development_dependency 'bundler'
+  s.add_development_dependency 'minitest'
+  s.add_development_dependency 'mocha'
 
   s.files        = Dir.glob('{lib,bin}/**/{*,.*}') + %w[LICENSE README.md]
   s.executables  = ['jet']

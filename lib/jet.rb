@@ -1,6 +1,7 @@
 require 'sprockets'
 
 module Jet
+  require 'jet/utils'
   require 'jet/handlebars_template'
   require 'jet/jst_processor'
 
