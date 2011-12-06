@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Erwan Barrier']
   s.email       = ['erwan.barrier@gmail.com']
   s.homepage    = 'http://github.com/erwanb/jet'
-  s.summary     = 'The Jet framework gem'
-  s.description = 'Jet is a micro framework that sits on top of sproutcore 2'
+  s.summary     = 'The Jet toolkit gem'
+  s.description = 'Jet is a tookit for SproutCore 2'
 
   s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project         = 'jet-framework'
