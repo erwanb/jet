@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mocha'
 
   s.files        = Dir.glob('{lib,bin}/**/{*,.*}') + %w[LICENSE README.md]
+  s.test_files   = Dir.glob('test/**/*')
   s.executables  = ['jet']
   s.require_path = 'lib'
 end
