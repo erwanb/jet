@@ -5,10 +5,15 @@ module Jet
     module Compass
       private
 
+      # Every images in app/images will be concatenated into a sprite by compass.
+      # It doesn't make sense to set images_path to 'app' but compass needs a
+      # directory inside the image directory to name the sprite, so this is is a
+      # necessary hack for now.
+      # For more info see : http://compass-style.org/help/tutorials/spriting
       def configure_compass
-        Compass.configuration do |config|
+        ::Compass.configuration do |config|
           config.project_path    = @root_path
-          config.images_dir      = ::File.join('build', 'development')
+          config.images_dir      = ::File.join('build', environment.to_s)
           config.images_path     = 'app'
           config.http_images_dir = '/'
         end

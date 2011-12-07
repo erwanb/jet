@@ -8,6 +8,8 @@ module Jet
     include Jet::Application::Sprockets
     include Jet::Application::Compass
 
+    attr_reader :environment
+
     def initialize(environment = :development)
       @environment = environment
       @root_path   = Dir.pwd
