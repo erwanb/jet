@@ -4,8 +4,17 @@ require 'sprockets-sass'
 module Jet
   class Application
     module Sprockets
-      ASSET_PATHS = ['config', 'app/models', 'app/controllers', 'app/views',
-        'app/templates', 'app/states', 'app/stylesheets', 'lib', 'vendor']
+      ASSETS_PATHS = [
+        'config',
+        'app/models',
+        'app/controllers',
+        'app/views',
+        'app/templates',
+        'app/states',
+        'app/stylesheets',
+        'lib',
+        'vendor'
+      ]
 
       private
 
@@ -21,7 +30,7 @@ module Jet
         return @sprockets_environment if defined? @sprockets_environment
 
         @sprockets_environment = Sprockets::Environment.new
-        ASSET_PATHS.each do |asset_path|
+        ASSETS_PATHS.each do |asset_path|
           @sprockets_environment.append_path(::File.join(@root_path, asset_path))
         end
         @sprockets_environment
