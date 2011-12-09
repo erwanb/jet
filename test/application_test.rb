@@ -62,6 +62,9 @@ describe Jet::Application do
   describe "Builder" do
     before do
       @application = Jet::Application.new(:root_path => File.join(File.dirname(__FILE__), 'fixtures', 'test_project'))
+    end
+
+    after do
       @application.clear_build
     end
 
