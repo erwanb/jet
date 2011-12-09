@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Jet
   class Application
     require 'jet/application/builder'
@@ -21,8 +23,8 @@ module Jet
       options = DEFAULT_OPTIONS.merge(options)
 
       @environment = options[:environment]
-      @root_path   = options[:root_path]
-      @build_path  = ::File.join(root_path, 'build', environment.to_s)
+      @root_path   = Pathname.new(options[:root_path])
+      @build_path  = root_path.join('build', environment.to_s)
 
       configure_compass
     end

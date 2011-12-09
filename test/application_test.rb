@@ -8,12 +8,12 @@ describe Jet::Application do
   describe 'Initialization' do
     describe 'application directory' do
       it 'is set to current directory by default' do
-        @application.root_path.must_equal(Dir.pwd)
+        @application.root_path.must_equal(Pathname.new(Dir.pwd))
       end
 
       it 'can be set in options hash' do
         application = Jet::Application.new(:root_path => 'test/path')
-        application.root_path.must_equal('test/path')
+        application.root_path.must_equal(Pathname.new('test/path'))
       end
     end
 
@@ -33,14 +33,14 @@ describe Jet::Application do
     [:development, :production].each do |environment|
       it "return PROJECT_DIR/build/#{environment} for environment \"#{environment}\"" do
         @application = Jet::Application.new(:environment => environment)
-        @application.build_path.must_equal(File.join(@application.root_path, 'build', environment.to_s))
+        @application.build_path.must_equal(@application.root_path.join('build', environment.to_s))
       end
     end
   end
 
   describe "Compass configuration" do
     it 'sets project path to current directory' do
-      Compass.configuration.project_path.must_equal(Dir.pwd)
+      Compass.configuration.project_path.must_equal(Pathname.new(Dir.pwd))
     end
 
     [:development, :production].each do |environment|
@@ -70,27 +70,27 @@ describe Jet::Application do
 
     describe '#clear_build' do
       it 'delete all files in build directory' do
-        FileUtils.touch(File.join(@application.build_path, 'test_file'))
-        FileUtils.mkdir(File.join(@application.build_path, 'test_directory'))
+        FileUtils.touch(@application.build_path.join('test_file'))
+        FileUtils.mkdir(@application.build_path.join('test_directory'))
         @application.clear_build
-        Dir.glob(File.join(@application.build_path, '*')).must_be_empty
+        Dir.glob(@application.build_path.join('*')).must_be_empty
       end
     end
 
     describe '#build_javascript' do
       it 'writes config/boot.js to build dir as "application.js"' do
-        expected_path = File.join(@application.build_path, 'application.js')
+        expected_path = @application.build_path.join('application.js')
         @application.build_javascript
-        assert File.exist?(expected_path)
+        assert expected_path.exist?
         IO.read(expected_path).must_equal("var boot = \"I am boot.js\";\n")
       end
     end
 
     describe '#build_stylesheet' do
       it 'writes app/stylesheets/application.css to build dir as "application.css"' do
-        expected_path = File.join(@application.build_path, 'application.css')
+        expected_path = @application.build_path.join('application.css')
         @application.build_stylesheet
-        assert File.exist?(expected_path)
+        assert expected_path.exist?
         IO.read(expected_path).must_equal("html{color:black}\n")
       end
     end
@@ -100,14 +100,12 @@ describe Jet::Application do
         @application.copy_static_assets_to_build
 
         def files_relative_to(parent_path)
-          parent_path = Pathname.new(parent_path)
-
-          Dir[File.join(parent_path, '**/*')].map do |absolute_path|
+          Dir[parent_path.join('**/*')].map do |absolute_path|
             Pathname.new(absolute_path).relative_path_from(parent_path)
           end
         end
 
-        expected_files = files_relative_to(File.join(@application.root_path, 'public'))
+        expected_files = files_relative_to(@application.root_path.join('public'))
         existing_files = files_relative_to(@application.build_path)
         expected_files.must_equal(existing_files)
       end
@@ -116,13 +114,13 @@ describe Jet::Application do
     describe '#copy_to_build' do
       it 'copy a file at the root of public/ to the root of build dir' do
         @application.copy_to_build(File.join('public', 'index.html'))
-        assert File.exist?(File.join(@application.build_path, 'index.html'))
+        assert @application.build_path.join('index.html').exist?
       end
 
       it 'create parent dirs of a file in build dir if they don\'t exist' do
         @application.copy_to_build(File.join('public', 'test_dir', 'test_file'))
-        assert File.exist?(File.join(@application.build_path, 'test_dir', 'test_file'))
-        assert File.file?(File.join(@application.build_path, 'test_dir', 'test_file'))
+        assert @application.build_path.join('test_dir', 'test_file').exist?
+        assert @application.build_path.join('test_dir', 'test_file').file?
         IO.read(File.join(@application.build_path, 'test_dir', 'test_file')).must_equal("test_file\n")
       end
     end
