@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe Jet::Application do
-  def setup
+  before do
     @application = Jet::Application.new
   end
 
