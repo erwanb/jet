@@ -29,7 +29,7 @@ module Jet
       def sprockets_environment
         return @sprockets_environment if defined? @sprockets_environment
 
-        @sprockets_environment = Sprockets::Environment.new
+        @sprockets_environment = ::Sprockets::Environment.new
         ASSETS_PATHS.each do |asset_path|
           @sprockets_environment.append_path(::File.join(@root_path, asset_path))
         end

@@ -26,10 +26,8 @@ module Jet
         build_relative_path = Pathname.new(::File.join(@build_path, absolute_path.relative_path_from(Pathname.new('public'))))
 
         FileUtils.mkdir_p(build_relative_path) unless build_relative_path.exist?
-        FileUtils.cp(file, build_relative_path)
+        FileUtils.cp(::File.join(@root_path, file), build_relative_path)
       end
-
-      private
 
       def copy_static_assets_to_build
         FileUtils.cp_r(::File.join(@root_path, 'public', '.'), @build_path)

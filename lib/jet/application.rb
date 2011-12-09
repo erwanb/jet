@@ -9,10 +9,19 @@ module Jet
     include Jet::Application::Compass
 
     attr_reader :environment
+    attr_reader :root_path
+    attr_reader :build_path
 
-    def initialize(environment = :development)
-      @environment = environment
-      @root_path   = Dir.pwd
+    DEFAULT_OPTIONS = {
+      :environment => :development,
+      :root_path   => Dir.pwd
+    }
+
+    def initialize(options = {})
+      options = DEFAULT_OPTIONS.merge(options)
+
+      @environment = options[:environment]
+      @root_path   = options[:root_path]
       @build_path  = ::File.join(@root_path, 'build', @environment.to_s)
 
       configure_compass
