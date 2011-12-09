@@ -28,5 +28,9 @@ module Jet
 
       configure_compass
     end
+
+    def public_path
+      @public_path ||= root_path.join('public')
+    end
   end
 end
