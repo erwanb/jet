@@ -1,10 +1,12 @@
 # Welcome to Jet
 
-**This is a quick & dirty proof of concept**
+Jet is a build tool for SproutCore 2.
+Here is a list of features targeted at v1.0.0:
 
-Jet is a toolkit for SproutCore 2 with the following goals:
-
-* rails-like conventions to organize your application code
-* automatic app building on file save
-* integration with compass
-* optimized build for production
+* Rails-like conventions to organize your application code
+* Automatic app building when files change
+* Compass integration
+* BPM integration
+* Support for CoffeeScript
+* Optimized build for production
+* Optionnal support for deferred execution with spade
