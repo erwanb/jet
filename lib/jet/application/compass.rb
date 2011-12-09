@@ -13,7 +13,7 @@ module Jet
       def configure_compass
         ::Compass.configuration do |config|
           config.project_path    = root_path
-          config.images_dir      = ::File.join('build', environment.to_s)
+          config.images_dir      = build_path.relative_path_from(root_path).to_s
           config.images_path     = 'app'
           config.http_images_dir = '/'
         end
