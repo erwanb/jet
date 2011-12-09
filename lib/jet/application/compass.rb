@@ -12,7 +12,7 @@ module Jet
       # For more info see : http://compass-style.org/help/tutorials/spriting
       def configure_compass
         ::Compass.configuration do |config|
-          config.project_path    = @root_path
+          config.project_path    = root_path
           config.images_dir      = ::File.join('build', environment.to_s)
           config.images_path     = 'app'
           config.http_images_dir = '/'

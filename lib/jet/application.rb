@@ -22,7 +22,7 @@ module Jet
 
       @environment = options[:environment]
       @root_path   = options[:root_path]
-      @build_path  = ::File.join(@root_path, 'build', @environment.to_s)
+      @build_path  = ::File.join(root_path, 'build', environment.to_s)
 
       configure_compass
     end
