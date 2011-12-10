@@ -18,7 +18,7 @@ module Jet
     desc 'new NAME', 'generates a new Jet app'
     attr_reader :name
     def new(name)
-      @name = name
+      @name = Utils.camelize(name)
       target = ::File.join(Dir.pwd, name)
 
       directory 'application', target

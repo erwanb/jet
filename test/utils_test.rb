@@ -10,4 +10,15 @@ describe Jet::Utils do
       Jet::Utils.escape_javascript(%(backslash\\test)).must_equal(%(backslash\\\\test))
     end
   end
+
+  describe '#camelize' do
+    it 'capitalize a simple word' do
+      Jet::Utils.camelize('word').must_equal('Word')
+    end
+
+    it 'treats "_", "-" as word separator' do
+      Jet::Utils.camelize('word_test').must_equal('WordTest')
+      Jet::Utils.camelize('word-test').must_equal('WordTest')
+    end
+  end
 end
