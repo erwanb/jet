@@ -10,7 +10,6 @@ module Jet
         'app/controllers',
         'app/views',
         'app/templates',
-        'app/states',
         'app/stylesheets',
         'lib',
         'vendor'
