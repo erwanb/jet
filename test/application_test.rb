@@ -12,8 +12,8 @@ describe Jet::Application do
       end
 
       it 'can be set in options hash' do
-        application = Jet::Application.new(:root_path => 'test/path')
-        application.root_path.must_equal(Pathname.new('test/path'))
+        application = Jet::Application.new(:root_path => fixtures_path.to_s)
+        application.root_path.must_equal(fixtures_path)
       end
     end
 
@@ -26,6 +26,12 @@ describe Jet::Application do
         application = Jet::Application.new(:environment => :production)
         application.environment.must_equal(:production)
       end
+    end
+
+    it 'change current dir to project path' do
+      project_path = fixtures_path.join('test_project').to_s
+      @application = Jet::Application.new(:root_path => project_path)
+      Dir.pwd.must_equal(project_path)
     end
   end
 
@@ -61,7 +67,7 @@ describe Jet::Application do
 
   describe "Builder" do
     before do
-      @application = Jet::Application.new(:root_path => File.join(File.dirname(__FILE__), 'fixtures', 'test_project'))
+      @application = Jet::Application.new(:root_path => fixtures_path.join('test_project').to_s)
     end
 
     after do
@@ -92,6 +98,42 @@ describe Jet::Application do
         @application.build_stylesheet
         assert expected_path.exist?
         IO.read(expected_path).must_equal("html{color:black}\n")
+      end
+    end
+
+    describe 'Sprite building' do
+      it 'generates a sprite' do
+        @application = Jet::Application.new(:root_path => fixtures_path.join('sprite_test').to_s)
+        @application.build_stylesheet
+        Dir[@application.build_path.join('images-*.png')].size.must_equal(1)
+      end
+
+      it 'delete old sprite before generating a new one' do
+        @application = Jet::Application.new(:root_path => fixtures_path.join('sprite_test').to_s)
+        stylesheet_path = @application.root_path.join('app/stylesheets/application.css.scss')
+
+        # Build stylesheet a first time and check that the sprite is generated
+        @application.build_stylesheet
+        old_sprite_path = Dir[@application.build_path.join('images-*.png')].first
+        assert File.exist?(old_sprite_path)
+
+        # Then add a new images and modify the stylesheet. If we don't do that a new sprite won't be generated
+        FileUtils.cp(fixtures_path.join('book.png'), @application.root_path.join('app/images/'))
+        File.open(stylesheet_path, File::WRONLY|File::APPEND) do |file|
+          file.write("\n")
+        end
+
+        # Build stylesheet once again and verify that the old sprite has been replaced by a new one
+        @application.build_stylesheet
+        assert !File.exist?(old_sprite_path), 'Old sprite file should not exist'
+        Dir[@application.build_path.join('images-*.png')].size.must_equal(1)
+
+        # Teardown
+        FileUtils.rm(@application.root_path.join('app/images/book.png'))
+        stylesheet_content = IO.read(stylesheet_path).chomp
+        File.open(stylesheet_path, "w") do |file|
+          file.print(stylesheet_content)
+        end
       end
     end
 

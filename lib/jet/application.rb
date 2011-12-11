@@ -26,6 +26,9 @@ module Jet
       @root_path   = Pathname.new(options[:root_path])
       @build_path  = root_path.join('build', environment.to_s)
 
+      # Compass needs current dir to be project path
+      Dir.chdir(@root_path)
+
       configure_compass
     end
 

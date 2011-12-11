@@ -1,0 +1,5 @@
+$images: sprite-map("images/*.png");
+
+body {
+  background: $images;
+}

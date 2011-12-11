@@ -10,3 +10,7 @@ require 'minitest/pride'
 require 'mocha'
 
 require 'jet'
+
+def fixtures_path
+  Pathname.new(File.dirname(__FILE__)).join('fixtures')
+end

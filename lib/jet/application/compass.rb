@@ -16,6 +16,9 @@ module Jet
           config.images_dir      = build_path.relative_path_from(root_path).to_s
           config.images_path     = 'app'
           config.http_images_dir = '/'
+          config.on_sprite_generated do |sprite_data|
+            FileUtils.rm(Dir[build_path.join('images-*.png')])
+          end
         end
       end
     end
