@@ -5,35 +5,23 @@ module Jet
     require 'jet/application/builder'
     require 'jet/application/sprockets'
     require 'jet/application/compass'
+    require 'jet/application/paths'
 
     include Jet::Application::Builder
     include Jet::Application::Sprockets
     include Jet::Application::Compass
+    include Jet::Application::Paths
 
     attr_reader :environment
-    attr_reader :root_path
-    attr_reader :build_path
-
-    DEFAULT_OPTIONS = {
-      :environment => :development,
-      :root_path   => Dir.pwd
-    }
 
     def initialize(options = {})
-      options = DEFAULT_OPTIONS.merge(options)
-
-      @environment = options[:environment]
-      @root_path   = Pathname.new(options[:root_path])
-      @build_path  = root_path.join('build', environment.to_s)
+      @environment = options.fetch(:environment, :development)
+      @root_path   = Pathname.new(options.fetch(:root_path, Dir.pwd))
 
       # Compass needs current dir to be project path
-      Dir.chdir(@root_path)
+      Dir.chdir(root_path)
 
       configure_compass
-    end
-
-    def public_path
-      @public_path ||= root_path.join('public')
     end
   end
 end
