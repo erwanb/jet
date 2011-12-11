@@ -35,11 +35,27 @@ describe Jet::Application do
     end
   end
 
-  describe '#build_path' do
-    [:development, :production].each do |environment|
-      it "return PROJECT_DIR/build/#{environment} for environment \"#{environment}\"" do
-        @application = Jet::Application.new(:environment => environment)
-        @application.build_path.must_equal(@application.root_path.join('build', environment.to_s))
+  describe 'paths' do
+    describe '#build_path' do
+      [:development, :production].each do |environment|
+        it "return PROJECT_DIR/build/#{environment} for environment \"#{environment}\"" do
+          @application = Jet::Application.new(:environment => environment)
+          @application.build_path.must_equal(Pathname.new(File.join(Dir.pwd, 'build', environment.to_s)))
+        end
+      end
+    end
+
+    describe '#tmp_path' do
+      it 'return PROJECT_DIR/tmp' do
+        @application = Jet::Application.new
+        @application.tmp_path.must_equal(Pathname.new(File.join(Dir.pwd, 'tmp')))
+      end
+    end
+
+    describe '#public_path' do
+      it 'return PROJECT_DIR/public' do
+        @application = Jet::Application.new
+        @application.public_path.must_equal(Pathname.new(File.join(Dir.pwd, 'public')))
       end
     end
   end

@@ -10,6 +10,10 @@ module Jet
       def public_path
         @public_path ||= root_path.join('public')
       end
+
+      def tmp_path
+        @tmp_path ||= root_path.join('tmp')
+      end
     end
   end
 end
