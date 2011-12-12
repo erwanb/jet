@@ -8,12 +8,18 @@ describe Jet::Application do
   describe 'Initialization' do
     describe 'application directory' do
       it 'is set to current directory by default' do
-        @application.root_path.must_equal(Pathname.new(Dir.pwd))
+        root_path = @application.root_path
+
+        root_path.must_be_instance_of(Pathname)
+        root_path.to_s.must_equal(Dir.pwd)
       end
 
       it 'can be set in options hash' do
-        application = Jet::Application.new(:root_path => fixtures_path.to_s)
-        application.root_path.must_equal(fixtures_path)
+        @application = Jet::Application.new(:root_path => fixtures_path.to_s)
+        root_path = @application.root_path
+
+        root_path.must_be_instance_of(Pathname)
+        root_path.must_equal(fixtures_path)
       end
     end
 
@@ -31,6 +37,7 @@ describe Jet::Application do
     it 'change current dir to project path' do
       project_path = fixtures_path.join('test_project').to_s
       @application = Jet::Application.new(:root_path => project_path)
+
       Dir.pwd.must_equal(project_path)
     end
   end
@@ -40,7 +47,10 @@ describe Jet::Application do
       [:development, :production].each do |environment|
         it "return PROJECT_DIR/build/#{environment} for environment \"#{environment}\"" do
           @application = Jet::Application.new(:environment => environment)
-          @application.build_path.must_equal(Pathname.new(File.join(Dir.pwd, 'build', environment.to_s)))
+          build_path = @application.build_path
+
+          build_path.must_be_instance_of(Pathname)
+          build_path.to_s.must_equal(File.join(Dir.pwd, 'build', environment.to_s))
         end
       end
     end
@@ -48,14 +58,20 @@ describe Jet::Application do
     describe '#tmp_path' do
       it 'return PROJECT_DIR/tmp' do
         @application = Jet::Application.new
-        @application.tmp_path.must_equal(Pathname.new(File.join(Dir.pwd, 'tmp')))
+        tmp_path = @application.tmp_path
+
+        tmp_path.must_be_instance_of(Pathname)
+        tmp_path.to_s.must_equal(File.join(Dir.pwd, 'tmp'))
       end
     end
 
     describe '#public_path' do
       it 'return PROJECT_DIR/public' do
         @application = Jet::Application.new
-        @application.public_path.must_equal(Pathname.new(File.join(Dir.pwd, 'public')))
+        public_path = @application.public_path
+
+        public_path.must_be_instance_of(Pathname)
+        public_path.to_s.must_equal(File.join(Dir.pwd, 'public'))
       end
     end
   end
