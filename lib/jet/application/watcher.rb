@@ -8,7 +8,7 @@ module Jet
           listener = Guard::Listener.select_and_init(root_path)
 
           listener.on_change do |files|
-            files = files.select { |file| file =~ /^(app|config|public|lib|vendor)\/.+$/ }
+            files = files.select { |file| file =~ /^(app|config|static|lib|vendor)\/.+$/ }
 
             @mutex.synchronize { run_on_change(files) } unless files.empty?
           end
@@ -21,7 +21,7 @@ module Jet
         already_built_stylesheet = false
 
         paths.each do |path|
-          if File.is_public?(path)
+          if File.is_static?(path)
             copy_to_build(path)
           elsif File.is_javascript?(path) && !already_built_javascript
             build_javascript

@@ -12,8 +12,8 @@ module Jet
         STYLESHEET_EXTENSIONS.include?(::File.extname(file))
       end
 
-      def is_public?(file)
-        ::File.dirname(file) =~ /^public/
+      def is_static?(file)
+        ::File.dirname(file) =~ /^static/
       end
     end
   end

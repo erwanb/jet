@@ -65,13 +65,13 @@ describe Jet::Application do
       end
     end
 
-    describe '#public_path' do
-      it 'return PROJECT_DIR/public' do
+    describe '#static_path' do
+      it 'return PROJECT_DIR/static' do
         @application = Jet::Application.new
-        public_path = @application.public_path
+        static_path = @application.static_path
 
-        public_path.must_be_instance_of(Pathname)
-        public_path.to_s.must_equal(File.join(Dir.pwd, 'public'))
+        static_path.must_be_instance_of(Pathname)
+        static_path.to_s.must_equal(File.join(Dir.pwd, 'static'))
       end
     end
   end
@@ -169,7 +169,7 @@ describe Jet::Application do
       end
 
       describe '#copy_static_assets_to_build' do
-        it 'copies public/ to the build directory' do
+        it 'copies static/ to the build directory' do
           @application.copy_static_assets_to_build
 
           def files_relative_to(parent_path)
@@ -178,20 +178,20 @@ describe Jet::Application do
             end
           end
 
-          expected_files = files_relative_to(@application.root_path.join('public'))
+          expected_files = files_relative_to(@application.root_path.join('static'))
           existing_files = files_relative_to(@application.build_path)
           expected_files.must_equal(existing_files)
         end
       end
 
       describe '#copy_to_build' do
-        it 'copy a file at the root of public/ to the root of build dir' do
-          @application.copy_to_build(File.join('public', 'index.html'))
+        it 'copy a file at the root of static/ to the root of build dir' do
+          @application.copy_to_build(File.join('static', 'index.html'))
           assert @application.build_path.join('index.html').exist?
         end
 
         it 'create parent dirs of a file in build dir if they don\'t exist' do
-          @application.copy_to_build(File.join('public', 'test_dir', 'test_file'))
+          @application.copy_to_build(File.join('static', 'test_dir', 'test_file'))
           assert @application.build_path.join('test_dir', 'test_file').exist?
           assert @application.build_path.join('test_dir', 'test_file').file?
           IO.read(File.join(@application.build_path, 'test_dir', 'test_file')).must_equal("test_file\n")
@@ -199,7 +199,7 @@ describe Jet::Application do
       end
 
       describe '#build_all' do
-        it 'build javascript, stylesheets and copy public dir to build dir' do
+        it 'build javascript, stylesheets and copy static dir to build dir' do
           @application.expects(:build_javascript).once
           @application.expects(:build_stylesheet).once
           @application.expects(:copy_static_assets_to_build).once
@@ -240,42 +240,42 @@ describe Jet::Application do
           @application.run_on_change(['app/css_file1.css', 'app/css_file2.css'])
         end
 
-        it 'copies file to build if a file is public' do
-          @application.expects(:copy_to_build).with('public/file.txt').once
-          @application.run_on_change(['public/file.txt'])
+        it 'copies file to build if a file is static' do
+          @application.expects(:copy_to_build).with('static/file.txt').once
+          @application.run_on_change(['static/file.txt'])
         end
 
-        it 'does not copy file to build if there are no public files' do
+        it 'does not copy file to build if there are no static files' do
           @application.expects(:copy_to_build).never
           @application.run_on_change(['app/file.txt'])
         end
 
-        it 'copies each public file to build' do
-          @application.expects(:copy_to_build).with('public/file1.txt').once
-          @application.expects(:copy_to_build).with('public/file2.txt').once
-          @application.run_on_change(['public/file1.txt', 'public/file2.txt'])
+        it 'copies each static file to build' do
+          @application.expects(:copy_to_build).with('static/file1.txt').once
+          @application.expects(:copy_to_build).with('static/file2.txt').once
+          @application.run_on_change(['static/file1.txt', 'static/file2.txt'])
         end
 
-        it 'works when js/css/public files change at the same time' do
-          @application.expects(:copy_to_build).with('public/file.txt').once
+        it 'works when js/css/static files change at the same time' do
+          @application.expects(:copy_to_build).with('static/file.txt').once
           @application.expects(:build_stylesheet).once
           @application.expects(:build_javascript).once
-          @application.run_on_change(['public/file.txt', 'app/js_file.js', 'app/css_file.css'])
+          @application.run_on_change(['static/file.txt', 'app/js_file.js', 'app/css_file.css'])
         end
 
-        it 'does not build javascript if file is js but public' do
+        it 'does not build javascript if file is js but static' do
           @application.expects(:build_javascript).never
-          @application.expects(:copy_to_build).with('public/js_file.js').once
-          @application.run_on_change(['public/js_file.js'])
+          @application.expects(:copy_to_build).with('static/js_file.js').once
+          @application.run_on_change(['static/js_file.js'])
         end
 
-        it 'does not build stylesheet if file is css but public' do
+        it 'does not build stylesheet if file is css but static' do
           @application.expects(:build_stylesheet).never
-          @application.expects(:copy_to_build).with('public/css_file.css').once
-          @application.run_on_change(['public/css_file.css'])
+          @application.expects(:copy_to_build).with('static/css_file.css').once
+          @application.run_on_change(['static/css_file.css'])
         end
 
-        it 'does nothing if file is neither public nor javascript nor stylesheet' do
+        it 'does nothing if file is neither static nor javascript nor stylesheet' do
           @application.expects(:build_stylesheet).never
           @application.expects(:build_javascript).never
           @application.expects(:copy_to_build).never

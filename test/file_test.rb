@@ -29,13 +29,13 @@ describe Jet::File do
     end
   end
 
-  describe "#is_public?" do
-    it 'returns true if path starts with \"public\"' do
-      assert Jet::File.is_public?('public/index.html')
+  describe "#is_static?" do
+    it 'returns true if path starts with \"static\"' do
+      assert Jet::File.is_static?('static/index.html')
     end
 
-    it 'returns false if path doesn\'t starts with \"public\"' do
-      assert !Jet::File.is_public?('app/public/index.html')
+    it 'returns false if path doesn\'t starts with \"static\"' do
+      assert !Jet::File.is_static?('app/static/index.html')
     end
   end
 end

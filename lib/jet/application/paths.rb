@@ -7,8 +7,8 @@ module Jet
         @build_path  ||= root_path.join('build', environment.to_s)
       end
 
-      def public_path
-        @public_path ||= root_path.join('public')
+      def static_path
+        @static_path ||= root_path.join('static')
       end
 
       def tmp_path
