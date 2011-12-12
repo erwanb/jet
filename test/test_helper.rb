@@ -1,6 +1,10 @@
 require 'simplecov'
 
-SimpleCov.start if ENV["COVERAGE"]
+if ENV["COVERAGE"]
+  SimpleCov.start do
+    add_filter "_test.rb"
+  end
+end
 
 gem "minitest"
 
