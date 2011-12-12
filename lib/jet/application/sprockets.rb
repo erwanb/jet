@@ -1,5 +1,6 @@
 require 'coffee_script'
 require 'sprockets-sass'
+require 'jet/sprockets/cache/file_store'
 
 module Jet
   class Application
@@ -15,8 +16,6 @@ module Jet
         'vendor'
       ]
 
-      private
-
       def application_javascript_asset
         sprockets_environment.find_asset('boot.js')
       end
@@ -29,6 +28,8 @@ module Jet
         return @sprockets_environment if defined? @sprockets_environment
 
         @sprockets_environment = ::Sprockets::Environment.new
+        @sprockets_environment.cache = Jet::Sprockets::Cache::FileStore.new(tmp_path)
+
         ASSETS_PATHS.each do |asset_path|
           @sprockets_environment.append_path(root_path.join(asset_path))
         end

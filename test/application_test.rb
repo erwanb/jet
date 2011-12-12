@@ -283,5 +283,14 @@ describe Jet::Application do
         end
       end
     end
+
+    describe 'Sprockets caching' do
+      it 'caches assets' do
+        cache = @application.sprockets_environment.cache
+
+        cache.wont_be_nil
+        cache.must_be_instance_of(Jet::Sprockets::Cache::FileStore)
+      end
+    end
   end
 end
