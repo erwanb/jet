@@ -3,6 +3,4 @@
 Gemfile.lock
 pkg/*
 coverage/*
-.sass-cache/*
-test/fixtures/sprite_test/.sass-cache/*
 .DS_Store*
