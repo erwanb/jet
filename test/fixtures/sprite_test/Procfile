@@ -1,2 +1,0 @@
-server:  ruby -rwebrick -e "WEBrick::HTTPServer.new(:Port => $PORT, :DocumentRoot => 'build/development').start"
-watcher: guard start -i
