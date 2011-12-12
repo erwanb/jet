@@ -10,7 +10,7 @@ module Jet
     end
 
     def self.source_root
-      ::File.expand_path(::File.join(::File.dirname(__FILE__), 'templates'))
+      ::File.expand_path(::File.join(::File.dirname(__FILE__), '../../templates'))
     end
 
     desc 'new NAME', 'generates a new Jet app'

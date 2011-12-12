@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'simplecov'
 
-  s.files        = Dir.glob('{lib,bin}/**/{*,.*}') + %w[LICENSE README.md]
+  s.files        = Dir.glob('{lib,bin,templates}/**/{*,.*}') + %w[LICENSE README.md]
   s.test_files   = Dir.glob('test/**/*')
   s.executables  = ['jet']
   s.require_path = 'lib'
