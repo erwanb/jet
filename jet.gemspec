@@ -16,12 +16,12 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = 'jet-framework'
 
   s.add_dependency 'thor'
-  s.add_dependency 'foreman'
   s.add_dependency 'sprockets'
   s.add_dependency 'coffee-script'
   s.add_dependency 'compass', ">= 0.12.alpha.2"
   s.add_dependency 'sprockets-sass'
   s.add_dependency 'guard'
+  s.add_dependency 'rack'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'minitest'

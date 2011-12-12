@@ -1,9 +1,0 @@
-guard 'jet' do
-  watch(%r{^(app|config|public|lib|vendor)/.+$})
-end
-
-# To reload automatically your app upon changes
-# see https://github.com/mockko/livereload
-#guard 'livereload' do
-#  watch(%r{^build/development/.+$})
-#end

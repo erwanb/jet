@@ -6,10 +6,6 @@ describe Jet::CLI do
   end
 
   describe '#server' do
-    it 'starts foreman' do
-      Foreman::CLI.any_instance.expects(:start)
-      @cli.server
-    end
   end
 
   describe '#new' do

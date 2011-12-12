@@ -5,11 +5,13 @@ module Jet
     require 'jet/application/builder'
     require 'jet/application/sprockets'
     require 'jet/application/compass'
+    require 'jet/application/watcher'
     require 'jet/application/paths'
 
     include Jet::Application::Builder
     include Jet::Application::Sprockets
     include Jet::Application::Compass
+    include Jet::Application::Watcher
     include Jet::Application::Paths
 
     attr_reader :environment

@@ -1,6 +1,4 @@
 require 'thor'
-require 'foreman'
-require 'foreman/cli'
 
 module Jet
   class CLI < Thor
@@ -8,7 +6,7 @@ module Jet
 
     desc 'server', 'start the Jet server'
     def server
-      Foreman::CLI.new.start
+      ::Rack::Server.start(:app => Jet::Rack.new, :Port => 5000)
     end
 
     def self.source_root

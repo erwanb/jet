@@ -151,44 +151,120 @@ describe Jet::Application do
           file.print(stylesheet_content)
         end
       end
-    end
 
-    describe '#copy_static_assets_to_build' do
-      it 'copies public/ to the build directory' do
-        @application.copy_static_assets_to_build
+      describe '#copy_static_assets_to_build' do
+        it 'copies public/ to the build directory' do
+          @application.copy_static_assets_to_build
 
-        def files_relative_to(parent_path)
-          Dir[parent_path.join('**/*')].map do |absolute_path|
-            Pathname.new(absolute_path).relative_path_from(parent_path)
+          def files_relative_to(parent_path)
+            Dir[parent_path.join('**/*')].map do |absolute_path|
+              Pathname.new(absolute_path).relative_path_from(parent_path)
+            end
           end
+
+          expected_files = files_relative_to(@application.root_path.join('public'))
+          existing_files = files_relative_to(@application.build_path)
+          expected_files.must_equal(existing_files)
+        end
+      end
+
+      describe '#copy_to_build' do
+        it 'copy a file at the root of public/ to the root of build dir' do
+          @application.copy_to_build(File.join('public', 'index.html'))
+          assert @application.build_path.join('index.html').exist?
         end
 
-        expected_files = files_relative_to(@application.root_path.join('public'))
-        existing_files = files_relative_to(@application.build_path)
-        expected_files.must_equal(existing_files)
+        it 'create parent dirs of a file in build dir if they don\'t exist' do
+          @application.copy_to_build(File.join('public', 'test_dir', 'test_file'))
+          assert @application.build_path.join('test_dir', 'test_file').exist?
+          assert @application.build_path.join('test_dir', 'test_file').file?
+          IO.read(File.join(@application.build_path, 'test_dir', 'test_file')).must_equal("test_file\n")
+        end
+      end
+
+      describe '#build_all' do
+        it 'build javascript, stylesheets and copy public dir to build dir' do
+          @application.expects(:build_javascript).once
+          @application.expects(:build_stylesheet).once
+          @application.expects(:copy_static_assets_to_build).once
+          @application.build_all
+        end
       end
     end
 
-    describe '#copy_to_build' do
-      it 'copy a file at the root of public/ to the root of build dir' do
-        @application.copy_to_build(File.join('public', 'index.html'))
-        assert @application.build_path.join('index.html').exist?
-      end
+    describe 'Watcher' do
+      describe '#run_on_change' do
+        it 'builds javascript if a file is javascript' do
+          @application.expects(:build_javascript).once
+          @application.run_on_change(['app/js_file.js'])
+        end
 
-      it 'create parent dirs of a file in build dir if they don\'t exist' do
-        @application.copy_to_build(File.join('public', 'test_dir', 'test_file'))
-        assert @application.build_path.join('test_dir', 'test_file').exist?
-        assert @application.build_path.join('test_dir', 'test_file').file?
-        IO.read(File.join(@application.build_path, 'test_dir', 'test_file')).must_equal("test_file\n")
-      end
-    end
+        it 'does not build javascript if there are no js files' do
+          @application.expects(:build_javascript).never
+          @application.run_on_change(['app/no_js_file.txt'])
+        end
 
-    describe '#build_all' do
-      it 'build javascript, stylesheets and copy public dir to build dir' do
-        @application.expects(:build_javascript).once
-        @application.expects(:build_stylesheet).once
-        @application.expects(:copy_static_assets_to_build).once
-        @application.build_all
+        it 'builds javascript only once if there are multiple js files' do
+          @application.expects(:build_javascript).once
+          @application.run_on_change(['app/js_file1.js', 'app/js_file2.js'])
+        end
+
+        it 'builds stylesheet if a file is stylesheet' do
+          @application.expects(:build_stylesheet).once
+          @application.run_on_change(['app/css_file.css'])
+        end
+
+        it 'does not build stylesheet if there are no css files' do
+          @application.expects(:build_stylesheet).never
+          @application.run_on_change(['app/no_css_file.txt'])
+        end
+
+        it 'builds stylesheet only once if there are multiple css files' do
+          @application.expects(:build_stylesheet).once
+          @application.run_on_change(['app/css_file1.css', 'app/css_file2.css'])
+        end
+
+        it 'copies file to build if a file is public' do
+          @application.expects(:copy_to_build).with('public/file.txt').once
+          @application.run_on_change(['public/file.txt'])
+        end
+
+        it 'does not copy file to build if there are no public files' do
+          @application.expects(:copy_to_build).never
+          @application.run_on_change(['app/file.txt'])
+        end
+
+        it 'copies each public file to build' do
+          @application.expects(:copy_to_build).with('public/file1.txt').once
+          @application.expects(:copy_to_build).with('public/file2.txt').once
+          @application.run_on_change(['public/file1.txt', 'public/file2.txt'])
+        end
+
+        it 'works when js/css/public files change at the same time' do
+          @application.expects(:copy_to_build).with('public/file.txt').once
+          @application.expects(:build_stylesheet).once
+          @application.expects(:build_javascript).once
+          @application.run_on_change(['public/file.txt', 'app/js_file.js', 'app/css_file.css'])
+        end
+
+        it 'does not build javascript if file is js but public' do
+          @application.expects(:build_javascript).never
+          @application.expects(:copy_to_build).with('public/js_file.js').once
+          @application.run_on_change(['public/js_file.js'])
+        end
+
+        it 'does not build stylesheet if file is css but public' do
+          @application.expects(:build_stylesheet).never
+          @application.expects(:copy_to_build).with('public/css_file.css').once
+          @application.run_on_change(['public/css_file.css'])
+        end
+
+        it 'does nothing if file is neither public nor javascript nor stylesheet' do
+          @application.expects(:build_stylesheet).never
+          @application.expects(:build_javascript).never
+          @application.expects(:copy_to_build).never
+          @application.run_on_change(['app/txt_file.txt'])
+        end
       end
     end
   end
