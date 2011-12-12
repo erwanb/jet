@@ -116,11 +116,11 @@ describe Jet::Application do
     end
 
     describe '#build_javascript' do
-      it 'writes config/boot.js to build dir as "application.js"' do
+      it 'writes app/application.js to build dir as "application.js"' do
         expected_path = @application.build_path.join('application.js')
         @application.build_javascript
         assert expected_path.exist?
-        IO.read(expected_path).must_equal("var boot = \"I am boot.js\";\n")
+        IO.read(expected_path).must_equal("var app = \"I am application.js\";\n")
       end
     end
 

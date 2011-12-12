@@ -1,1 +1,0 @@
-window.<%= name %> = SC.Application.create()

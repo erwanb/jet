@@ -6,18 +6,18 @@ module Jet
   class Application
     module Sprockets
       ASSETS_PATHS = [
-        'config',
         'app/models',
         'app/controllers',
         'app/views',
         'app/templates',
         'app/stylesheets',
+        'app',
         'lib',
         'vendor'
       ]
 
       def application_javascript_asset
-        sprockets_environment.find_asset('boot.js')
+        sprockets_environment.find_asset('application.js')
       end
 
       def application_stylesheet_asset
