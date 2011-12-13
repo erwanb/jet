@@ -1,3 +1,5 @@
+require 'guard'
+
 module Jet
   class Application
     module Watcher

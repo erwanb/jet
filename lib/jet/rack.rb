@@ -1,5 +1,4 @@
 require 'rack'
-require 'guard'
 
 module Jet
   class Rack
