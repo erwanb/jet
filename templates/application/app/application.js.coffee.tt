@@ -1,5 +1,5 @@
 #= require jquery/jquery-1.6.1.min
-#= require sproutcore/sproutcore-2.0.beta.3.min
+#= require ember/ember-0.9.min
 
 #= require_self
 #= require_tree ./models
@@ -7,4 +7,4 @@
 #= require_tree ./templates
 #= require_tree ./views
 
-window.<%= name %> = SC.Application.create()
+window.<%= name %> = Ember.Application.create()

@@ -7,7 +7,7 @@ module Jet
     end
 
     def evaluate(scope, locals, &block)
-      "SC.Handlebars.compile(\"#{data}\")"
+      "Ember.Handlebars.compile(\"#{data}\")"
     end
 
     def prepare

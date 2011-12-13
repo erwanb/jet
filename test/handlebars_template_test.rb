@@ -19,12 +19,12 @@ describe Jet::HandlebarsTemplate do
     asset.to_s.must_match(/escaped javascript/)
   end
 
-  it 'render javascript code to compile template with SproutCore flavor of Handlebars' do
+  it 'render javascript code to compile template with Ember flavor of Handlebars' do
     asset = handlebars_asset
     body = asset.body
 
     body.must_be_instance_of(String)
-    body.must_equal("SC.Handlebars.compile(\"this is a test template\\n\");\n")
+    body.must_equal("Ember.Handlebars.compile(\"this is a test template\\n\");\n")
   end
 
   def handlebars_asset
