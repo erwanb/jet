@@ -281,6 +281,21 @@ describe Jet::Application do
           @application.expects(:copy_to_build).never
           @application.run_on_change(['app/txt_file.txt'])
         end
+
+        it 'delete file in build if static file is deleted' do
+          @application.expects(:delete_from_build).with('static/txt_file.txt').once
+          @application.run_on_change(['!static/txt_file.txt'])
+        end
+
+        it 'builds stylesheet if a stylesheet file is deleted' do
+          @application.expects(:build_stylesheet).once
+          @application.run_on_change(['!app/css_file.css'])
+        end
+
+        it 'builds javascript if a javascript file is deleted' do
+          @application.expects(:build_javascript).once
+          @application.run_on_change(['!app/js_file.js'])
+        end
       end
     end
 

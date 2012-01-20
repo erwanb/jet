@@ -13,7 +13,11 @@ module Jet
       end
 
       def is_static?(file)
-        ::File.dirname(file) =~ /^static/
+        ::File.dirname(file) =~ /^!?static/
+      end
+
+      def is_deleted?(file)
+        file =~ /^!/
       end
     end
   end

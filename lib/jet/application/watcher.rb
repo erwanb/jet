@@ -7,10 +7,10 @@ module Jet
         @mutex = Mutex.new
 
         Thread.new do
-          listener = Guard::Listener.select_and_init(root_path)
+          listener = Guard::Listener.select_and_init(:watchdir => root_path, :watch_all_modifications => true)
 
           listener.on_change do |files|
-            files = files.select { |file| file =~ /^(app|config|static|lib|vendor)\/.+$/ }
+            files = files.select { |file| file =~ /^!?(app|config|static|lib|vendor)\/.+$/ }
 
             @mutex.synchronize { run_on_change(files) } unless files.empty?
           end
@@ -24,7 +24,7 @@ module Jet
 
         paths.each do |path|
           if File.is_static?(path)
-            copy_to_build(path)
+            File.is_deleted?(path) ? delete_from_build(path[1..-1]) : copy_to_build(path)
           elsif File.is_javascript?(path) && !already_built_javascript
             build_javascript
             already_built_javascript = true

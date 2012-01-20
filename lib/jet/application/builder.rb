@@ -27,6 +27,13 @@ module Jet
         FileUtils.cp(root_path.join(file), build_relative_path)
       end
 
+      def delete_from_build(file)
+        absolute_path       = root_path.join(file)
+        build_relative_path = build_path.join(absolute_path.relative_path_from(static_path))
+
+        FileUtils.rm_rf(build_relative_path)
+      end
+
       def copy_static_assets_to_build
         FileUtils.cp_r(::File.join(static_path, '.'), build_path)
       end

@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'coffee-script'
   s.add_dependency 'compass', ">= 0.12.alpha.2"
   s.add_dependency 'sprockets-sass'
-  s.add_dependency 'guard'
+  s.add_dependency 'guard', ">= 1.0.0"
   s.add_dependency 'rack'
 
   s.add_development_dependency 'bundler'
