@@ -6,7 +6,7 @@ module Jet
 
     desc 'server', 'start the Jet server'
     def server
-      ::Rack::Server.start(:app => Jet::Rack.new, :Port => 5000)
+      ::Rack::Server.start(:config => 'config.ru', :Port => 5000)
     end
 
     def self.source_root
@@ -20,6 +20,14 @@ module Jet
       target = ::File.join(Dir.pwd, name)
 
       directory 'application', target
+    end
+
+    desc 'generate_prototype NAME', 'generates a new prototype'
+    def generate_prototype(name)
+      # name = Utils.underscore(name)
+      target = ::File.join(Dir.pwd, 'test/prototypes', name)
+
+      directory 'prototype', target
     end
   end
 end

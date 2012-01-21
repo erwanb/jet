@@ -9,6 +9,7 @@ module Jet
         build_javascript
         build_stylesheet
         copy_static_assets_to_build
+        copy_prototypes_to_build
       end
 
       def build_javascript
@@ -36,6 +37,10 @@ module Jet
 
       def copy_static_assets_to_build
         FileUtils.cp_r(::File.join(static_path, '.'), build_path)
+      end
+
+      def copy_prototypes_to_build
+        FileUtils.cp_r(prototypes_path, build_path)
       end
     end
   end

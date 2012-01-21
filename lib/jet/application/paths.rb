@@ -14,6 +14,10 @@ module Jet
       def tmp_path
         @tmp_path ||= root_path.join('tmp')
       end
+
+      def prototypes_path
+        @prototypes_path ||= root_path.join('test/prototypes')
+      end
     end
   end
 end
