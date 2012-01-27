@@ -19,6 +19,10 @@ module Jet
       def is_deleted?(file)
         file =~ /^!/
       end
+
+      def is_prototype?(file)
+        file =~ /^!?test\/prototypes/
+      end
     end
   end
 end

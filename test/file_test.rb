@@ -34,8 +34,26 @@ describe Jet::File do
       assert Jet::File.is_static?('static/index.html')
     end
 
+    it 'returns true if path is a static asset being deleted' do
+      assert Jet::File.is_static?('!static/index.html')
+    end
+
     it 'returns false if path doesn\'t starts with \"static\"' do
       assert !Jet::File.is_static?('app/static/index.html')
+    end
+  end
+
+  describe "#is_prototype?" do
+    it 'returns true if path starts with \"test/prototypes\"' do
+      assert Jet::File.is_prototype?('test/prototypes/test.html')
+    end
+
+    it 'returns true if path is a prototype asset being deleted' do
+      assert Jet::File.is_prototype?('!test/prototypes/test.html')
+    end
+
+    it 'returns false if path doesn\'t starts with \"test/prototypes/test.html\"' do
+      assert !Jet::File.is_prototype?('prototypes/test.html')
     end
   end
 end

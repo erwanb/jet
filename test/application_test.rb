@@ -74,6 +74,26 @@ describe Jet::Application do
         static_path.to_s.must_equal(File.join(Dir.pwd, 'static'))
       end
     end
+
+    describe '#test_path' do
+      it 'returns PROJECT_DIR/test' do
+        @application = Jet::Application.new
+        test_path = @application.test_path
+
+        test_path.must_be_instance_of(Pathname)
+        test_path.to_s.must_equal(File.join(Dir.pwd, 'test'))
+      end
+    end
+
+    describe '#prototype_path' do
+      it 'returns PROJECT_DIR/test/prototype' do
+        @application = Jet::Application.new
+        prototypes_path = @application.prototypes_path
+
+        prototypes_path.must_be_instance_of(Pathname)
+        prototypes_path.to_s.must_equal(File.join(Dir.pwd, 'test', 'prototypes'))
+      end
+    end
   end
 
   describe "Compass configuration" do
@@ -199,10 +219,11 @@ describe Jet::Application do
       end
 
       describe '#build_all' do
-        it 'build javascript, stylesheets and copy static dir to build dir' do
+        it 'build javascript, stylesheets, copy static dir to build dir and copy prototypes to build dir' do
           @application.expects(:build_javascript).once
           @application.expects(:build_stylesheet).once
           @application.expects(:copy_static_assets_to_build).once
+          @application.expects(:copy_prototypes_to_build).once
           @application.build_all
         end
       end
@@ -295,6 +316,21 @@ describe Jet::Application do
         it 'builds javascript if a javascript file is deleted' do
           @application.expects(:build_javascript).once
           @application.run_on_change(['!app/js_file.js'])
+        end
+
+        it 'copies file to build if a file is prototype' do
+          @application.expects(:copy_prototype_asset_to_build).once
+          @application.run_on_change(['test/prototypes/js_file.js'])
+        end
+
+        it 'does not copy file to build if there are no prototypes files' do
+          @application.expects(:copy_prototype_asset_to_build).never
+          @application.run_on_change(['app/file.txt'])
+        end
+
+        it 'delete file in build if prototype file is deleted' do
+          @application.expects(:delete_prototype_asset_from_build).with('test/prototypes/txt_file.txt').once
+          @application.run_on_change(['!test/prototypes/txt_file.txt'])
         end
       end
     end
