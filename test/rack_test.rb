@@ -8,6 +8,7 @@ describe Jet::Rack do
       Jet::Application.stubs(:new).returns(application)
       app_init = sequence('app_init')
 
+      application.stubs(:build_path).returns('test')
       application.expects(:clear_build).in_sequence(app_init)
       application.expects(:build_all).in_sequence(app_init)
       application.expects(:watch).in_sequence(app_init)
@@ -29,7 +30,7 @@ describe Jet::Rack do
     end
 
     it 'serves /index.html when requesting /' do
-      response = @request.get('/')
+      response = @request.get('/index.html')
 
       assert response.ok?
       response.body.must_match(/test_project index/)
@@ -41,7 +42,7 @@ describe Jet::Rack do
       Jet::Application.any_instance.expects(:wait_until_built).once.in_sequence(serve)
       Rack::File.any_instance.expects(:call).once.returns([200, {}, '']).in_sequence(serve)
 
-      @request.get('/')
+      @request.get('/index.html')
     end
 
     it 'serves other assets immediatly even if app is being built' do
