@@ -22,14 +22,5 @@ module Jet
 
       directory 'application', target
     end
-
-    desc 'generate_prototype NAME', 'generates a new prototype (short-cut alias: "gp")'
-    def generate_prototype(name)
-      # name = Utils.underscore(name)
-      target = ::File.join(Dir.pwd, 'test/prototypes', name)
-
-      directory 'prototype', target
-    end
-    map 'gp' => 'generate_prototype'
   end
 end

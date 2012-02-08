@@ -9,7 +9,6 @@ module Jet
         build_javascript
         build_stylesheet
         copy_static_assets_to_build
-        copy_prototypes_to_build
       end
 
       def build_javascript
@@ -37,27 +36,6 @@ module Jet
 
       def copy_static_assets_to_build
         FileUtils.cp_r(::File.join(static_path, '.'), build_path)
-      end
-
-      def copy_prototypes_to_build
-        FileUtils.cp_r(prototypes_path, build_path)
-      end
-
-      def copy_prototype_asset_to_build(file)
-        absolute_path = root_path.join(file)
-        build_relative_path = build_path.join(absolute_path.relative_path_from(test_path))
-
-        puts file
-        puts build_relative_path
-        FileUtils.mkdir_p(build_relative_path.dirname) unless build_relative_path.dirname.exist?
-        FileUtils.cp(root_path.join(file), build_relative_path)
-      end
-
-      def delete_prototype_asset_from_build(file)
-        absolute_path       = root_path.join(file)
-        build_relative_path = build_path.join(absolute_path.relative_path_from(test_path))
-
-        FileUtils.rm_rf(build_relative_path)
       end
     end
   end
