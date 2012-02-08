@@ -10,4 +10,5 @@ module Jet
   require 'jet/cli'
   require 'jet/application'
   require 'jet/file'
+  require 'jet/railtie' if defined?(Rails::Railtie)
 end
