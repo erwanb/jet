@@ -1,6 +1,7 @@
 require 'test_helper'
+require 'jet/middleware'
 
-describe Jet::Rack do
+describe Jet::Middleware do
   describe 'Initialization' do
     it 'rebuilds app and start watching' do
       application = mock
@@ -12,14 +13,17 @@ describe Jet::Rack do
       application.expects(:clear).in_sequence(app_init)
       application.expects(:build).in_sequence(app_init)
       application.expects(:watch).in_sequence(app_init)
-      rack = Jet::Rack.new
+      middleware = Jet::Middleware.new(nil)
     end
   end
 
   describe '#call' do
     before do
       Dir.chdir(fixtures_path.join('test_project'))
-      @request = Rack::MockRequest.new(Jet::Rack.new)
+
+      app = lambda { |env| [404, {}, ['not found']] }
+
+      @request = Rack::MockRequest.new(Jet::Middleware.new(app))
     end
 
     it 'serves files in build dir' do
@@ -30,7 +34,7 @@ describe Jet::Rack do
     end
 
     it 'serves /index.html when requesting /' do
-      response = @request.get('/index.html')
+      response = @request.get('/')
 
       assert response.ok?
       response.body.must_match(/test_project index/)
@@ -45,9 +49,11 @@ describe Jet::Rack do
       @request.get('/index.html')
     end
 
-    it 'serves other assets immediatly even if app is being built' do
-      Jet::Application.any_instance.expects(:wait_until_built).never
-      @request.get('/404.html')
+    it 'falls back to the app' do
+      response = @request.get('notfound_request')
+
+      response.status.must_equal(404)
+      response.body.must_equal('not found')
     end
   end
 end
