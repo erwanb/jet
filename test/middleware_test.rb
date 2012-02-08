@@ -33,11 +33,18 @@ describe Jet::Middleware do
       response.body.must_match(/test_project index/)
     end
 
-    it 'serves /index.html when requesting /' do
+    it 'serves index.html when requesting a directory' do
       response = @request.get('/')
 
       assert response.ok?
       response.body.must_match(/test_project index/)
+    end
+
+    it "ignores directories without index.html" do
+      response = @request.get('/empty_dir')
+
+      response.status.must_equal(404)
+      response.body.must_equal('not found')
     end
 
     it 'waits until app is built to serve /index.html' do
