@@ -42,4 +42,14 @@ describe File do
       assert !File.static?('app/static/index.html')
     end
   end
+
+  describe '#deleted?' do
+    it 'returns true if path starts with "!"' do
+      assert File.deleted?('!test.txt')
+    end
+
+    it 'returns false if path doesn\'t starts with "!"' do
+      assert !File.deleted?('test.txt')
+    end
+  end
 end
