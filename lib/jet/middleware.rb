@@ -20,9 +20,9 @@ module Jet
       path = env['PATH_INFO']
 
       if filename = file_for(path)
-        if ::File.directory?(filename)
-          index = ::File.join(filename, 'index.html')
-          filename = ::File.file?(index) ? index : nil
+        if File.directory?(filename)
+          index = File.join(filename, 'index.html')
+          filename = File.file?(index) ? index : nil
           env['PATH_INFO'] += 'index.html'
         end
 
@@ -37,7 +37,7 @@ module Jet
     private
 
     def file_for(path)
-      Dir[::File.join(jet_app.build_path, path)].first
+      Dir[File.join(jet_app.build_path, path)].first
     end
   end
 end

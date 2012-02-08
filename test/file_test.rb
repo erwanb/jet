@@ -1,45 +1,45 @@
 require 'test_helper'
 
-describe Jet::File do
-  describe '#is_javascript?' do
+describe File do
+  describe '#javascript?' do
     ['js', 'coffee', 'hbs'].each do |extension|
       it "returns true with file extension \"#{extension}\"" do
-        assert Jet::File.is_javascript?("file.#{extension}")
+        assert File.javascript?("file.#{extension}")
       end
     end
 
     ['txt', 'html', 'css'].each do |extension|
       it "returns false with file extension \"#{extension}\"" do
-        assert !Jet::File.is_javascript?("file.#{extension}")
+        assert !File.javascript?("file.#{extension}")
       end
     end
   end
 
-  describe '#is_stylesheet?' do
+  describe '#stylesheet?' do
     ['css', 'sass', 'scss'].each do |extension|
       it "returns true with file extension \"#{extension}\"" do
-        assert Jet::File.is_stylesheet?("file.#{extension}")
+        assert File.stylesheet?("file.#{extension}")
       end
     end
 
     ['txt', 'html', 'js'].each do |extension|
       it "returns false with file extension \"#{extension}\"" do
-        assert !Jet::File.is_stylesheet?("file.#{extension}")
+        assert !File.stylesheet?("file.#{extension}")
       end
     end
   end
 
-  describe "#is_static?" do
+  describe "#static?" do
     it 'returns true if path starts with \"static\"' do
-      assert Jet::File.is_static?('static/index.html')
+      assert File.static?('static/index.html')
     end
 
     it 'returns true if path is a static asset being deleted' do
-      assert Jet::File.is_static?('!static/index.html')
+      assert File.static?('!static/index.html')
     end
 
     it 'returns false if path doesn\'t starts with \"static\"' do
-      assert !Jet::File.is_static?('app/static/index.html')
+      assert !File.static?('app/static/index.html')
     end
   end
 end

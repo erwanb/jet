@@ -23,12 +23,12 @@ module Jet
         already_built_stylesheet = false
 
         paths.each do |path|
-          if File.is_static?(path)
-            File.is_deleted?(path) ? delete_static_asset_from_build(path[1..-1]) : copy_static_asset_to_build(path)
-          elsif File.is_javascript?(path) && !already_built_javascript
+          if File.static?(path)
+            File.deleted?(path) ? delete_static_asset_from_build(path[1..-1]) : copy_static_asset_to_build(path)
+          elsif File.javascript?(path) && !already_built_javascript
             build_javascript
             already_built_javascript = true
-          elsif File.is_stylesheet?(path) && !already_built_stylesheet
+          elsif File.stylesheet?(path) && !already_built_stylesheet
             build_stylesheet
             already_built_stylesheet = true
           end

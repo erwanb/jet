@@ -35,7 +35,7 @@ module Jet
       end
 
       def copy_static_assets_to_build
-        FileUtils.cp_r(::File.join(static_path, '.'), build_path)
+        FileUtils.cp_r(File.join(static_path, '.'), build_path)
       end
     end
   end
