@@ -10,5 +10,4 @@ module Jet
   require 'jet/cli'
   require 'jet/application'
   require 'jet/file'
-  require 'jet/rack'
 end
