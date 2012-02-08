@@ -7,8 +7,8 @@ module Jet
     def initialize
       @application = Application.new
 
-      @application.clear_build
-      @application.build_all
+      @application.clear
+      @application.build
       @application.watch
 
       @file_server = ::Rack::Directory.new(@application.build_path)

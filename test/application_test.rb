@@ -103,14 +103,14 @@ describe Jet::Application do
     end
 
     after do
-      @application.clear_build
+      @application.clear
     end
 
-    describe '#clear_build' do
+    describe '#clear' do
       it 'delete all files in build directory' do
         FileUtils.touch(@application.build_path.join('test_file'))
         FileUtils.mkdir(@application.build_path.join('test_directory'))
-        @application.clear_build
+        @application.clear
         Dir.glob(@application.build_path.join('*')).must_be_empty
       end
     end
@@ -184,14 +184,14 @@ describe Jet::Application do
         end
       end
 
-      describe '#copy_to_build' do
+      describe '#copy_static_asset_to_build' do
         it 'copy a file at the root of static/ to the root of build dir' do
-          @application.copy_to_build(File.join('static', 'index.html'))
+          @application.copy_static_asset_to_build(File.join('static', 'index.html'))
           assert @application.build_path.join('index.html').exist?
         end
 
         it 'create parent dirs of a file in build dir if they don\'t exist' do
-          @application.copy_to_build(File.join('static', 'test_dir', 'test_file'))
+          @application.copy_static_asset_to_build(File.join('static', 'test_dir', 'test_file'))
           assert @application.build_path.join('test_dir', 'test_file').exist?
           assert @application.build_path.join('test_dir', 'test_file').file?
           IO.read(File.join(@application.build_path, 'test_dir', 'test_file')).must_equal("test_file\n")
@@ -203,7 +203,7 @@ describe Jet::Application do
           @application.expects(:build_javascript).once
           @application.expects(:build_stylesheet).once
           @application.expects(:copy_static_assets_to_build).once
-          @application.build_all
+          @application.build
         end
       end
     end
@@ -241,23 +241,23 @@ describe Jet::Application do
         end
 
         it 'copies file to build if a file is static' do
-          @application.expects(:copy_to_build).with('static/file.txt').once
+          @application.expects(:copy_static_asset_to_build).with('static/file.txt').once
           @application.run_on_change(['static/file.txt'])
         end
 
         it 'does not copy file to build if there are no static files' do
-          @application.expects(:copy_to_build).never
+          @application.expects(:copy_static_asset_to_build).never
           @application.run_on_change(['app/file.txt'])
         end
 
         it 'copies each static file to build' do
-          @application.expects(:copy_to_build).with('static/file1.txt').once
-          @application.expects(:copy_to_build).with('static/file2.txt').once
+          @application.expects(:copy_static_asset_to_build).with('static/file1.txt').once
+          @application.expects(:copy_static_asset_to_build).with('static/file2.txt').once
           @application.run_on_change(['static/file1.txt', 'static/file2.txt'])
         end
 
         it 'works when js/css/static files change at the same time' do
-          @application.expects(:copy_to_build).with('static/file.txt').once
+          @application.expects(:copy_static_asset_to_build).with('static/file.txt').once
           @application.expects(:build_stylesheet).once
           @application.expects(:build_javascript).once
           @application.run_on_change(['static/file.txt', 'app/js_file.js', 'app/css_file.css'])
@@ -265,25 +265,25 @@ describe Jet::Application do
 
         it 'does not build javascript if file is js but static' do
           @application.expects(:build_javascript).never
-          @application.expects(:copy_to_build).with('static/js_file.js').once
+          @application.expects(:copy_static_asset_to_build).with('static/js_file.js').once
           @application.run_on_change(['static/js_file.js'])
         end
 
         it 'does not build stylesheet if file is css but static' do
           @application.expects(:build_stylesheet).never
-          @application.expects(:copy_to_build).with('static/css_file.css').once
+          @application.expects(:copy_static_asset_to_build).with('static/css_file.css').once
           @application.run_on_change(['static/css_file.css'])
         end
 
         it 'does nothing if file is neither static nor javascript nor stylesheet' do
           @application.expects(:build_stylesheet).never
           @application.expects(:build_javascript).never
-          @application.expects(:copy_to_build).never
+          @application.expects(:copy_static_asset_to_build).never
           @application.run_on_change(['app/txt_file.txt'])
         end
 
         it 'delete file in build if static file is deleted' do
-          @application.expects(:delete_from_build).with('static/txt_file.txt').once
+          @application.expects(:delete_static_asset_from_build).with('static/txt_file.txt').once
           @application.run_on_change(['!static/txt_file.txt'])
         end
 

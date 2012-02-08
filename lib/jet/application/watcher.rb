@@ -24,7 +24,7 @@ module Jet
 
         paths.each do |path|
           if File.is_static?(path)
-            File.is_deleted?(path) ? delete_from_build(path[1..-1]) : copy_to_build(path)
+            File.is_deleted?(path) ? delete_static_asset_from_build(path[1..-1]) : copy_static_asset_to_build(path)
           elsif File.is_javascript?(path) && !already_built_javascript
             build_javascript
             already_built_javascript = true

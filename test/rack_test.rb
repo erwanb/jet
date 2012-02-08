@@ -9,8 +9,8 @@ describe Jet::Rack do
       app_init = sequence('app_init')
 
       application.stubs(:build_path).returns('test')
-      application.expects(:clear_build).in_sequence(app_init)
-      application.expects(:build_all).in_sequence(app_init)
+      application.expects(:clear).in_sequence(app_init)
+      application.expects(:build).in_sequence(app_init)
       application.expects(:watch).in_sequence(app_init)
       rack = Jet::Rack.new
     end
