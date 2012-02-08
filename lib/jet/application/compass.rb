@@ -14,7 +14,7 @@ module Jet
         ::Compass.configuration do |config|
           config.project_path    = root_path
           config.images_dir      = build_path.relative_path_from(root_path).to_s
-          config.images_path     = 'app'
+          config.images_path     = root_path.join('app').to_s
           config.http_images_dir = '/'
           config.sass_options    = {:cache_location => tmp_path.join('sass-cache')}
 

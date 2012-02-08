@@ -33,13 +33,6 @@ describe Jet::Application do
         application.environment.must_equal(:production)
       end
     end
-
-    it 'change current dir to project path' do
-      project_path = fixtures_path.join('test_project').to_s
-      @application = Jet::Application.new(:root_path => project_path)
-
-      Dir.pwd.must_equal(project_path)
-    end
   end
 
   describe 'paths' do
@@ -86,10 +79,6 @@ describe Jet::Application do
         @application = Jet::Application.new(:environment => environment)
         Compass.configuration.images_dir.must_equal("build/#{environment}")
       end
-    end
-
-    it 'sets images_path to "app"' do
-      Compass.configuration.images_path.must_equal('app')
     end
 
     it 'makes images accessibles at the http root path' do
