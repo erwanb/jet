@@ -24,7 +24,7 @@ describe Jet::HandlebarsTemplate do
     body = asset.body
 
     body.must_be_instance_of(String)
-    body.must_equal("Ember.Handlebars.compile(\"this is a test template\\n\");\n")
+    body.must_equal("Ember.TEMPLATES[\"hbs_template\"] = Ember.Handlebars.compile(\"this is a test template\\n\");\n")
   end
 
   def handlebars_asset

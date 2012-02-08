@@ -7,7 +7,7 @@ module Jet
     end
 
     def evaluate(scope, locals, &block)
-      "Ember.Handlebars.compile(\"#{data}\")"
+      "Ember.TEMPLATES[\"#{scope.logical_path}\"] = Ember.Handlebars.compile(\"#{data}\");\n"
     end
 
     def prepare
