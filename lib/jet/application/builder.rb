@@ -6,17 +6,19 @@ module Jet
       end
 
       def build
-        build_javascript
-        build_stylesheet
+        build_asset(:javascript)
+        build_asset(:stylesheet)
         copy_static_assets_to_build
       end
 
-      def build_javascript
-        application_javascript_asset.write_to(build_path.join('application.js'))
-      end
+      def build_asset(name)
+        path = build_path.join(ASSETS[name])
 
-      def build_stylesheet
-        application_stylesheet_asset.write_to(build_path.join('application.css'))
+        asset(name).write_to(path)
+      rescue Exception => exception
+        File.open(path, "w") do |file|
+          file.write("#{exception.class.name}\n\n#{exception.message}")
+        end
       end
 
       def copy_static_asset_to_build(file)

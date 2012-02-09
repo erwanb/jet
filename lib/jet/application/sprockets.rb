@@ -16,12 +16,8 @@ module Jet
         'vendor'
       ]
 
-      def application_javascript_asset
-        sprockets_environment.find_asset('application.js')
-      end
-
-      def application_stylesheet_asset
-        sprockets_environment.find_asset('application.css')
+      def asset(name)
+        sprockets_environment.find_asset(ASSETS[name])
       end
 
       def sprockets_environment

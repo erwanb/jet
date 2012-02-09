@@ -26,10 +26,10 @@ module Jet
           if File.static?(path)
             File.deleted?(path) ? delete_static_asset_from_build(path[1..-1]) : copy_static_asset_to_build(path)
           elsif File.javascript?(path) && !already_built_javascript
-            build_javascript
+            build_asset(:javascript)
             already_built_javascript = true
           elsif File.stylesheet?(path) && !already_built_stylesheet
-            build_stylesheet
+            build_asset(:stylesheet)
             already_built_stylesheet = true
           end
         end

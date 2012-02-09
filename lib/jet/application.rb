@@ -14,6 +14,11 @@ module Jet
     include Jet::Application::Watcher
     include Jet::Application::Paths
 
+    ASSETS = {
+      :javascript => 'application.js',
+      :stylesheet => 'application.css'
+    }
+
     attr_reader :environment
 
     def initialize(options = {})
