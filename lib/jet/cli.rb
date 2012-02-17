@@ -6,8 +6,8 @@ module Jet
 
     desc 'server', 'start the Jet server (short-cut alias: "s")'
     def server
-      require 'jet/server'
-      Jet::Server.new.start
+      require 'rack'
+      Rack::Server.start(:config => 'config.ru')
     end
     map 's' => 'server'
 
