@@ -6,14 +6,13 @@ describe Jet::Middleware do
     it 'rebuilds app and start watching' do
       application = mock
       application.stub_everything
-      Jet::Application.stubs(:new).returns(application)
       app_init = sequence('app_init')
 
       application.stubs(:build_path).returns('test')
       application.expects(:clear).in_sequence(app_init)
       application.expects(:build).in_sequence(app_init)
       application.expects(:watch).in_sequence(app_init)
-      middleware = Jet::Middleware.new(nil)
+      middleware = Jet::Middleware.new(nil, application)
     end
   end
 
@@ -23,7 +22,7 @@ describe Jet::Middleware do
 
       app = lambda { |env| [404, {}, ['not found']] }
 
-      @request = Rack::MockRequest.new(Jet::Middleware.new(app))
+      @request = Rack::MockRequest.new(Jet::Middleware.new(app, Jet::Application.new))
     end
 
     it 'serves files in build dir' do

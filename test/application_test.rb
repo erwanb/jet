@@ -2,12 +2,15 @@ require 'test_helper'
 
 describe Jet::Application do
   before do
-    @application = Jet::Application.new
+    @application = Jet::Application.new(:root_path => fixtures_path.join('test_project').to_s)
   end
 
   describe 'Initialization' do
     describe 'application directory' do
       it 'is set to current directory by default' do
+        Dir.chdir(fixtures_path.join('test_project'))
+
+        @application = Jet::Application.new
         root_path = @application.root_path
 
         root_path.must_be_instance_of(Pathname)
@@ -15,11 +18,10 @@ describe Jet::Application do
       end
 
       it 'can be set in options hash' do
-        @application = Jet::Application.new(:root_path => fixtures_path.to_s)
         root_path = @application.root_path
 
         root_path.must_be_instance_of(Pathname)
-        root_path.must_equal(fixtures_path)
+        root_path.to_s.must_equal(fixtures_path.join('test_project').to_s)
       end
     end
 
@@ -29,7 +31,7 @@ describe Jet::Application do
       end
 
       it 'can be set in options hash' do
-        application = Jet::Application.new(:environment => :production)
+        application = Jet::Application.new(:environment => :production, :root_path => fixtures_path.join('test_project').to_s)
         application.environment.must_equal(:production)
       end
     end
@@ -39,44 +41,44 @@ describe Jet::Application do
     describe '#build_path' do
       [:development, :production].each do |environment|
         it "return PROJECT_DIR/build/#{environment} for environment \"#{environment}\"" do
-          @application = Jet::Application.new(:environment => environment)
+          @application = Jet::Application.new(:environment => environment, :root_path => fixtures_path.join('test_project').to_s)
           build_path = @application.build_path
 
           build_path.must_be_instance_of(Pathname)
-          build_path.to_s.must_equal(File.join(Dir.pwd, 'build', environment.to_s))
+          build_path.to_s.must_equal(fixtures_path.join("test_project/build/#{environment}").to_s)
         end
       end
     end
 
     describe '#tmp_path' do
       it 'return PROJECT_DIR/tmp' do
-        @application = Jet::Application.new
+        @application = Jet::Application.new(:root_path => fixtures_path.join('test_project').to_s)
         tmp_path = @application.tmp_path
 
         tmp_path.must_be_instance_of(Pathname)
-        tmp_path.to_s.must_equal(File.join(Dir.pwd, 'tmp'))
+        tmp_path.to_s.must_equal(fixtures_path.join('test_project/tmp').to_s)
       end
     end
 
     describe '#static_path' do
       it 'return PROJECT_DIR/static' do
-        @application = Jet::Application.new
+        @application = Jet::Application.new(:root_path => fixtures_path.join('test_project').to_s)
         static_path = @application.static_path
 
         static_path.must_be_instance_of(Pathname)
-        static_path.to_s.must_equal(File.join(Dir.pwd, 'static'))
+        static_path.to_s.must_equal(fixtures_path.join('test_project/static').to_s)
       end
     end
   end
 
   describe "Compass configuration" do
     it 'sets project path to current directory' do
-      Compass.configuration.project_path.must_equal(Pathname.new(Dir.pwd))
+      Compass.configuration.project_path.must_equal(fixtures_path.join('test_project'))
     end
 
     [:development, :production].each do |environment|
       it "sets image dir to build/#{environment} for environment \"#{environment}\"" do
-        @application = Jet::Application.new(:environment => environment)
+        @application = Jet::Application.new(:environment => environment, :root_path => fixtures_path.join('test_project').to_s)
         Compass.configuration.images_dir.must_equal("build/#{environment}")
       end
     end
