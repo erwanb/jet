@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'sprockets-sass'
   s.add_dependency 'guard', ">= 1.0.0"
   s.add_dependency 'rack'
+  s.add_dependency 'rack-reverse-proxy'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'minitest'
