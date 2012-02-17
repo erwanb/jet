@@ -13,7 +13,7 @@ module Jet
 
         proxy_url = config.proxy_url
 
-        proxy = Rack::ReverseProxy.new do
+        proxy = ::Rack::ReverseProxy.new do
           reverse_proxy '*', proxy_url
         end
 
