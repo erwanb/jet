@@ -10,7 +10,7 @@ module Jet
       # directory inside the image directory to name the sprite, so this is is a
       # necessary hack for now.
       # For more info see : http://compass-style.org/help/tutorials/spriting
-      def configure_compass
+      def configure_compass!
         ::Compass.configuration do |config|
           config.project_path    = root_path
           config.images_dir      = build_path.relative_path_from(root_path).to_s

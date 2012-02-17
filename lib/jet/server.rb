@@ -1,12 +1,17 @@
 require 'jet/middleware'
+require 'rack/reverse_proxy'
 require 'rack/server'
 
 module Jet
   class Server < Rack::Server
     def app
-      not_found = proc { [404, { 'Content-Type' => 'text/plain' }, ['not found']] }
+      jet_app = Jet::Application.new
 
-      Middleware.new(not_found)
+      proxy = Rack::ReverseProxy.new do
+        reverse_proxy '*', jet_app.config.proxy_url
+      end
+
+      Middleware.new(proxy, jet_app)
     end
   end
 end

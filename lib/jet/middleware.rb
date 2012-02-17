@@ -4,9 +4,9 @@ module Jet
   class Middleware
     attr_reader :jet_app
 
-    def initialize(app, options = {})
+    def initialize(app, jet_app)
       @app = app
-      @jet_app = Application.new(options)
+      @jet_app = jet_app
 
       @jet_app.clear
       @jet_app.build
